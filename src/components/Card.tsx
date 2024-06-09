@@ -1,15 +1,39 @@
-function Card(id: number, name: string) {
+interface CardProps {
+  id: number;
+  name: string;
+  image: string;
+  types: {
+    type: {
+      name: string;
+    };
+  }[];
+}
+
+function Card({ id, name, image, types }: CardProps) {
+  const formattedId = id.toString().padStart(3, '0');
+
   return (
-    <div className='rounded-2xl border-2 border-slate-950 p-8 mb-4 flex flex-col justify-center items-center cursor-pointer'>
-      <div className='w-full flex justify-center'>
-        <img
-          src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`}
-          alt={name}
-        />
+    <div className='rounded-2xl border-2 border-b-8 border-slate-950 p-8 mb-4 flex flex-col justify-center items-center cursor-pointer'>
+      <div className='w-full flex justify-center relative'>
+        <p className='absolute text-8xl opacity-40 text-gray-400 font-extrabold -z-10'>
+          #{formattedId}
+        </p>
+        <img src={image} alt={name} />
       </div>
-      <p className=''>{id}</p>
-      <div>{name}</div>
-      {/* <div>grass etc</div> */}
+
+      <div className='font-semibold capitalize text-xl'>{name}</div>
+      <div className='flex gap-4'>
+        {types.map((type) => {
+          return (
+            <div
+              key={type.type.name}
+              className='bg-slate-950 text-white rounded-full px-4 py-1 mt-2'
+            >
+              {type.type.name}
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 }

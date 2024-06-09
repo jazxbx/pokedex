@@ -1,41 +1,60 @@
 import { useEffect, useState } from 'react';
+import { BASE_URL } from './config';
+
 import './tailwind.css';
+import Card from './components/Card';
 
-function App() {
-  // Fetch pokemon data\
-
+const App = () => {
   interface Pokemon {
     id: number;
     name: string;
     sprites: {
       front_default: string;
     };
+    types: {
+      type: {
+        name: string;
+      };
+    }[];
   }
 
-  const [pokemonList, setPokemonList] = useState<Pokemon[]>([]);
-  console.log(pokemonList);
+  const [pokemons, setPokemons] = useState<Pokemon[]>([]);
 
-  async function fetchPokemon(): Promise<void> {
-    try {
-      const res = await fetch('https://pokeapi.co/api/v2/ability/?limit=30');
-      if (!res.ok) throw new Error('Failed to fetch data');
-      const data = await res.json();
-      console.log(data);
-      setPokemonList(data);
-    } catch (error) {
-      console.error(error);
-    }
-  }
+  const fetchAllPokemon = async () => {
+    const res = await fetch(`${BASE_URL}?limit=50`);
+    const data = await res.json();
+    // console.log(data);
+    const pokemonObject = data.results.map(async (pokemon: Pokemon) => {
+      const res = await fetch(`${BASE_URL}${pokemon.name}`);
+      return await res.json();
+    });
+
+    const allPokemonData = await Promise.all(pokemonObject);
+    setPokemons(allPokemonData);
+    // console.log('pokemons:', allPokemonData);
+  };
 
   useEffect(() => {
-    fetchPokemon();
+    fetchAllPokemon();
   }, []);
 
   return (
-    <main className='bg-slate-100 h-screen overflow-hidden m-auto p-8'>
-      <section className='grid md:grid-cols-3 gap-4 py-8'></section>
+    <main className='h-screen'>
+      <section className='grid md:grid-cols-3 gap-4 p-8'>
+        {pokemons.map((pokemon) => {
+          return (
+            <Card
+              key={pokemon.id}
+              id={pokemon.id}
+              name={pokemon.name}
+              image={pokemon.sprites.front_default}
+              types={pokemon.types}
+            />
+          );
+        })}
+      </section>
     </main>
   );
-}
+};
 
 export default App;
