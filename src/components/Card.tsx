@@ -7,13 +7,17 @@ interface CardProps {
       name: string;
     };
   }[];
+  onClick: () => void;
 }
 
-function Card({ id, name, image, types }: CardProps) {
+function Card({ id, name, image, types, onClick }: CardProps) {
   const formattedId = id.toString().padStart(3, '0');
 
   return (
-    <div className='rounded-2xl border-2 border-b-8 border-slate-950 p-8 mb-4 flex flex-col justify-center items-center cursor-pointer'>
+    <div
+      className='rounded-2xl border-2 border-b-8 border-slate-950 p-8 mb-4 flex flex-col justify-center items-center cursor-pointer'
+      onClick={onClick}
+    >
       <div className='w-full flex justify-center relative'>
         <p className='absolute text-8xl opacity-40 text-gray-400 font-extrabold -z-10'>
           #{formattedId}
