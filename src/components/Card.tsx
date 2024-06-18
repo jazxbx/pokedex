@@ -8,9 +8,10 @@ interface CardProps {
     };
   }[];
   onClick: () => void;
+  backgrounds: { [key: string]: string };
 }
 
-function Card({ id, name, image, types, onClick }: CardProps) {
+function Card({ id, name, image, types, onClick, backgrounds }: CardProps) {
   const formattedId = id.toString().padStart(3, '0');
 
   return (
@@ -31,7 +32,9 @@ function Card({ id, name, image, types, onClick }: CardProps) {
           return (
             <div
               key={type.type.name}
-              className='bg-slate-950 text-white rounded-full px-4 py-1 mt-2'
+              className={`${
+                backgrounds[type.type.name] || backgrounds.normal
+              } text-white rounded-full px-4 py-1 mt-2`}
             >
               {type.type.name}
             </div>
