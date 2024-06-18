@@ -50,9 +50,7 @@ const App = () => {
   };
   // state get pokemon query
   const [pokemons, setPokemons] = useState<Pokemon[]>([]);
-
   const [search, setSearch] = useState<string>('');
-  const [filteredPokemon, setFilteredPokemon] = useState<Pokemon[]>([]);
   //modal states
   const [selectedPokemon, setSelectedPokemon] = useState<Pokemon | null>(null);
   const [openModal, setOpenModal] = useState(false);
@@ -80,22 +78,14 @@ const App = () => {
     setOpenModal(true);
   }
 
-  //when I type something on the search, I need to capture that value and check it against pokemon data via filter method?
   function handleSearch(event: React.ChangeEvent<HTMLInputElement>) {
     const searchQuery = event.target.value.toLowerCase();
     setSearch(searchQuery);
   }
 
-  function filterPokemon(pokemons: Pokemon[]) {
-    const filter = pokemons.filter((pokemon) => {
-      return pokemon.name.toLowerCase().includes(search);
-    });
-    setFilteredPokemon(filter);
-  }
-
-  useEffect(() => {
-    filterPokemon(pokemons);
-  }, [search, pokemons]);
+  const filteredPokemon = pokemons.filter((pokemon) => {
+    return pokemon.name.toLowerCase().includes(search);
+  });
 
   return (
     <main className='h-screen'>
