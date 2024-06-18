@@ -13,6 +13,7 @@ interface PokemonInfoProps {
       name: string;
     };
   }[];
+  backgrounds: { [key: string]: string };
 }
 
 export default function PokemonInfo({
@@ -21,11 +22,12 @@ export default function PokemonInfo({
   img,
   types,
   stats,
+  backgrounds,
 }: PokemonInfoProps) {
   const formattedId = id.toString().padStart(3, '0');
 
   return (
-    <div>
+    <div className='cursor-default'>
       <div className='flex items-center'>
         <img src={img} alt='' />
         <div className='ml-2'>
@@ -36,7 +38,9 @@ export default function PokemonInfo({
               return (
                 <div
                   key={type.type.name}
-                  className='bg-slate-950 text-white rounded-full px-4 py-1 mt-2 text-xs'
+                  className={`${
+                    backgrounds[type.type.name] || backgrounds.normal
+                  } text-white rounded-full px-3 py-1 mt-2 text-sm`}
                 >
                   {type.type.name}
                 </div>
